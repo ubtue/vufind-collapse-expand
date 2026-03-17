@@ -88,6 +88,8 @@ Here is the step by step to enable this module:
     Add a reference in your result-list.phtml to the result-list-snippet.phtml
     `<?=$this->render('RecordDriver/DefaultRecord/result-list-snippet.phtml')?>`
 
+    A good point for adding this include would be at the bottom of `<div class="media-body">`, right before the `</div>`.
+
     **Record Tab**
 
     CollapseExpand comes with a record tab called `Other Document` to show the expand documents when user access the detail information of the record. Using the feature is simple, just follow the instruction below to activate.
