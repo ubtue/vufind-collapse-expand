@@ -1,6 +1,7 @@
 {
     "name": "ubtue/vufind-collapse-expand",
     "description": "Adding Solr Collapse & Expand functionality to VuFind, initially based on finc/vufind-results-grouping.",
+    "license": "GPL-2.0",
     "authors": [
         {
             "name": "Cornelius Amzar",
