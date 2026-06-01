@@ -14,11 +14,11 @@ jobs:
         php-version: ['8.2', '8.3', '8.4']
         include:
           - php-version: 8.2
-            phing_tasks: "qa-console"
+            phing_tasks: "qa-php"
           - php-version: 8.3
             phing_tasks: "qa-console"
           - php-version: 8.4
-            phing_tasks: "qa-console"
+            phing_tasks: "qa-php"
 
     steps:
       - name: Setup PHP
@@ -49,6 +49,13 @@ jobs:
           path: .php_cs_cache
           key: "php-${{ matrix.php-version }}-php-cs-fixer-${{ github.sha }}"
           restore-keys: "php-${{ matrix.php-version }}-php-cs-fixer-"
+
+      - name: Cache PHP_CodeSniffer data
+        uses: actions/cache@v4
+        with:
+          path: tests/phpcs.cache.json
+          key: "php-${{ matrix.php-version }}-phpcs-${{ github.sha }}"
+          restore-keys: "php-${{ matrix.php-version }}-phpcs-"
 
       - name: Cache phpstan data
         uses: actions/cache@v4

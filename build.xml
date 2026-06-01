@@ -40,7 +40,14 @@
   </target>
 
   <!-- Quality Assurance PHP Tasks -->
-  <target name="qa-console" description="quality assurance php tasks">
+  <target name="qa-console" description="quality assurance tasks">
+    <phingcall target="qa-php"/>
+  </target>
+
+  <!-- Quality Assurance PHP Tasks -->
+  <target name="qa-php" description="quality assurance php tasks">
+    <!-- phpunit is disabled for now since we don't use unit testing so far -->
+    <!--<phingcall target="phpunitfast"/>-->
     <phingcall target="phpcs-console"/>
     <phingcall target="php-cs-fixer-dryrun"/>
     <!-- phpstan is disabled for now since we did not find a proper way yet to include whole VuFind as dev dependency and check against parent classes -->

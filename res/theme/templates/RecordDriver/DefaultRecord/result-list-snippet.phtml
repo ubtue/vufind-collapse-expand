@@ -37,7 +37,7 @@
               <?php /* adds .single-grouped-record selector for displaying containing favorite-list via JS (check_save_statuses.js) */ ?>
               <?php /* adds .ajaxItem selector for displaying item status via JS (check_item_statuses.js) */ ?>
               <li id="<?=$pid . $count?>" class="result ajaxItem">
-                  <div class="record-number"><?= $count+1 ?></div>  
+                  <div class="record-number"><?= $count + 1 ?></div>
                   <?php /* reuses logic from search/list-list.phtml */ ?>
                   <?php if ($showCheckboxes): ?>
                       <?=$this->record($sub)->getCheckbox('', 'search-cart-form', $pid . $count)?>
