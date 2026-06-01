@@ -11,9 +11,9 @@ jobs:
       VUFIND_LOCAL_DIR: $GITHUB_WORKSPACE/local
     strategy:
       matrix:
-        php-version: ['8.1']
+        php-version: ['8.2']
         include:
-          - php-version: 8.1
+          - php-version: 8.2
             phing_tasks: "qa-console"
 
     steps:
