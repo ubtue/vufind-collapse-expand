@@ -5,8 +5,8 @@ $finder->in(__DIR__)
     ->in(__DIR__ . '/../src');
 
 $rules = [
-    '@PHP81Migration' => true,
-    '@PHPUnit100Migration:risky' => true,
+    '@PHP8x2Migration' => true,
+    '@PHPUnit10x0Migration:risky' => true,
     '@PSR12' => true,
     'align_multiline_comment' => true,
     'binary_operator_spaces' => [
@@ -15,6 +15,7 @@ $rules = [
     ],
     'cast_spaces' => ['space' => 'none'],
     'class_attributes_separation' => ['elements' => ['method' => 'one', 'property' => 'one']],
+    'class_reference_name_casing' => true,
     'concat_space' => ['spacing' => 'one'],
     'ereg_to_preg' => true,
     'get_class_to_class_keyword' => true,
