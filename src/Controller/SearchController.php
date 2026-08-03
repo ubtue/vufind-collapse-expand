@@ -45,7 +45,9 @@ class SearchController extends \VuFind\Controller\SearchController implements Co
     public function resultsAction()
     {
         $view = parent::resultsAction();
-        $view->collapseExpandConfig = $this->collapseExpandConfig;
+        if ($view instanceof \Laminas\View\Model\ViewModel) {
+            $view->setVariable('collapseExpandConfig', $this->collapseExpandConfig);
+        }
         return $view;
     }
 
