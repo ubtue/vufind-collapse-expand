@@ -13,6 +13,27 @@ class CollapseExpand extends AbstractHelper implements CollapseExpandConfigAware
 {
     use CollapseExpandConfigAwareTrait;
 
+    /**
+     * Search options manager
+     *
+     * @var \VuFind\Search\Options\PluginManager
+     */
+    protected $searchOptionsManager;
+
+    /**
+     * Search results manager
+     *
+     * @var \VuFind\Search\Results\PluginManager
+     */
+    protected $searchResultsManager;
+
+    /**
+     * Search service
+     *
+     * @var \VuFindSearch\Service
+     */
+    protected $searchService;
+
     public function __construct(
         \VuFind\Search\Options\PluginManager $som,
         \VuFind\Search\Results\PluginManager $srm,

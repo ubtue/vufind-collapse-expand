@@ -14,6 +14,13 @@ class CollapseExpand extends \VuFind\RecordTab\AbstractContent implements
 
     protected $expandedDocumentsCount = 0;
 
+    /**
+     * View helper
+     *
+     * @var \VuFindCollapseExpand\View\Helper\CollapseExpand\CollapseExpand
+     */
+    protected $viewHelper;
+
     public function __construct(
         $viewHelperManager
     ) {
