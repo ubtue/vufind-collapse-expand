@@ -30,7 +30,7 @@ namespace VuFindCollapseExpand\Controller;
 trait SingleResultTrait
 {
     /**
-     * prevent forwarding if subrecords exists:
+     * Prevent forwarding if subrecords exists:
      * use parent processJumpToOnlyResult if the first result has no subrecord(s)
      * to figure out if forwarding is configured in
      * config.ini [Record] processJumpToOnlyResult
