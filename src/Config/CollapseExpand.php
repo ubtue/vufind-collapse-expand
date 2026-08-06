@@ -97,7 +97,13 @@ class CollapseExpand
         if ($this->container->offsetExists('collapse.enabled')) {
             $params['collapse.enabled'] = $this->container->offsetGet('collapse.enabled');
         } else {
-            $params['collapse.enabled'] = $collapseConfig['collapse.field'] !== null;
+            $default = $this->config->get('collapse_enabled_by_default');
+            if ($default !== null) {
+                $params['collapse.enabled'] = (bool)$default;
+            }
+            else {
+                $params['collapse.enabled'] = $collapseConfig['collapse.field'] !== null;
+            }
         }
 
         $params += ($collapseConfig + $expandConfig);

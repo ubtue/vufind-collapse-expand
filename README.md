@@ -54,12 +54,14 @@ Here is the step by step to enable this module:
     ```ini
 
     ; The mandatory fields are collapse.field, expand.field, and expand.rows. It is better to set the same value for collapse.field and expand.field.
-    ; When the collapse.field is set, the feature is active.
+    ; collapse_enabled_by_default sets the initial grouping state. If not set collapse.field is checked for feature activation.
     ; If you want to override defaults / use specific features, please have a look at the Solr Documentation:
     ; https://solr.apache.org/guide/solr/latest/query-guide/collapse-and-expand-results.html
-    ; collapse
-    ; mandatory fields are collapse.field, expand.field and expand.rows. The collapse.field is recommended to set the same value with expand.field
     [CollapseExpand]
+    ; collapse_enabled_by_default sets the initial state of the grouping (default = true)
+    ; users can override this by clicking the checkbox
+    collapse_enabled_by_default = true
+   
     collapse.field = title_sort
     ;collapse.min =
     ;collapse.max =
