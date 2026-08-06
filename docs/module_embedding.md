@@ -5,7 +5,10 @@ Here is the step by step guidance to enable this module:
 ## Embedding the module
 
 1. Add the following line to `composer.json`:
-    `"ubtue/vufind-collapse-expand": "@dev"`
+    * dev-package: `"ubtue/vufind-collapse-expand": "@dev"`  
+    * for VuFind 10: `"ubtue/vufind-collapse-expand": "dev-release-10.2"`
+    * for VuFind 11: `"ubtue/vufind-collapse-expand": "dev-release-11.0"`
+    
     Note that a more concise versioning schema will be introduced as soon as the first release is created (for matching VuFind version).
 
 2. Update composer package (via terminal):
@@ -73,7 +76,7 @@ expand.rows = 500
 Add the mixin to your custom theme by referencing it in your `theme.config.php`:
 `'mixins' => ['vufind-collapse-expand']`
 
-Experimental: The corresponding folder should be auto-created during composer installation, but if they are missing, just copy them manually from or create a symlink to:
+Copy the corresponding folder from this module into the VuFind theme folder or create a symlink to it:
 `vendor/ubtue/vufind-collapse-expand/res/theme` => `themes/vufind-collapse-expand`
 
 ### Template includes and overrides
@@ -82,7 +85,7 @@ The following sections contain information about how to include certain snippets
 
 #### Search result list
 
-* **Checkbox** (search control) for en-/disbaling the grouping 
+* **Checkbox** (search control) for en-/disabling the grouping 
 
     Add a reference in your search/results.phtml to the result-list-snippet.phtml
     Copy the code in the file `res/theme/templates/search/controls/collapse_expand.html` where you want the checkbox for enabling/ disabling CollapseExpand dynamically, for example in `[your_theme]/templates/search/results.html`
