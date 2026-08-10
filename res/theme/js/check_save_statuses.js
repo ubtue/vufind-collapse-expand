@@ -5,7 +5,6 @@
  * - displays corresponding favorite lists of each record
  *
  * modified for vufind-collapse-expand (every change has been commented in the code):
- * -- adds .single-grouped-record selector for requesting grouped records too
  * -- for displaying: adds first() for locating favorite selector correctly
  *
  * Important:
@@ -149,8 +148,7 @@ VuFind.register("saveStatuses", function ItemStatuses() {
       return;
     }
 
-    // vufind-collapse-expand: adds single-grouped-record selector for grouped items
-    const records = container.querySelectorAll(".result,.record,.single-grouped-record");
+    const records = container.querySelectorAll(".result,.record");
     records.forEach(checkSaveStatus);
 
     VuFind.emit("save-status-done");
@@ -169,8 +167,7 @@ VuFind.register("saveStatuses", function ItemStatuses() {
       VuFind.observerManager.createIntersectionObserver(
         'saveStatuses',
         checkSaveStatus,
-        // vufind-collapse-expand: adds single-grouped-record selector for grouped items
-        container.querySelectorAll(".result,.record,.single-grouped-record")
+        container.querySelectorAll(".result,.record")
       );
     }
   }
