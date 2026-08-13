@@ -147,9 +147,19 @@ class CollapseExpand
      * Check if Collapse and Expand is available in the configuration
      * @return bool
      */
-    public function isEnabled(): bool
+    public function isCollapseConfigured(): bool
     {
         return $this->config->get('collapse.field') !== null;
+    }
+
+    /**
+     * Check if Collapse and Expand is available in the configuration
+     * @return bool
+     * @deprecated use isCollapseConfigured() instead
+     */
+    public function isEnabled(): bool
+    {
+        return $this->isCollapseConfigured();
     }
 
     /**

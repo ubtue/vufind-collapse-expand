@@ -132,7 +132,7 @@ trait ParamsTrait
         $this->collapseExpandConfig->restoreFromCookie();
 
         // check if grouping is enabled in the configuration && by the user in the session (frontend)
-        if ($this->collapseExpandConfig->isEnabled() && $this->collapseExpandConfig->isActive()) {
+        if ($this->collapseExpandConfig->isCollapseConfigured() && $this->collapseExpandConfig->isActive()) {
             $backendParams->add('expand', 'true');
 
             // construct collapse parameters
@@ -223,7 +223,7 @@ trait ParamsTrait
 
     public function isEnableCollapseExpand(): bool
     {
-        return $this->collapseExpandConfig->isEnabled();
+        return $this->collapseExpandConfig->isCollapseConfigured();
     }
 
     public function isActivatedCollapseExpand(): bool
