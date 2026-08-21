@@ -2,7 +2,7 @@
 
 ?>
 <?php if ($this->results instanceof Results): ?>
-    <?php if ($this->params->getSearchClassId() == 'Solr' && $this->collapseExpandConfig->isCollapseConfigured()): ?>
+    <?php if ($this->params->getSearchClassId() == 'Solr' && $this->collapseExpandConfig->isEnabled()): ?>
         <form class="form-inline search-collapse-expand" action="<?= $this->currentPath() ?>"
             method="POST" id="collapse-expand-form">
             <div class="form-group">
