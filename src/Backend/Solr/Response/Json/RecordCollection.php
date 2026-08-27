@@ -45,7 +45,7 @@ class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCo
 
             $this->offset = 0;
         } else {
-            $this->offset = $this->response['response']['start'];
+            $this->offset = $this->response['response']['start'] ?? 0;
         }
 
         $this->expanded = isset($this->response['expanded']) && is_array($response['expanded']);

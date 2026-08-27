@@ -41,6 +41,7 @@ use function in_array;
 class SearchController extends \VuFind\Controller\SearchController implements CollapseExpandConfigAwareInterface
 {
     use CollapseExpandConfigAwareTrait;
+    use SingleResultTrait;
 
     public function resultsAction()
     {
