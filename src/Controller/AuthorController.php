@@ -40,6 +40,7 @@ use VuFindCollapseExpand\Config\CollapseExpandConfigAwareTrait;
 class AuthorController extends \VuFind\Controller\AuthorController implements CollapseExpandConfigAwareInterface
 {
     use CollapseExpandConfigAwareTrait;
+    use SingleResultTrait;
 
     /**
      * Sets the configuration for displaying author results

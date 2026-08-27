@@ -23,6 +23,20 @@ use function sprintf;
 class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory implements
     RecordCollectionFactoryInterface
 {
+    /**
+     * Factory to turn data into a record object.
+     *
+     * @var callable
+     */
+    protected $recordFactory;
+
+    /**
+     * Class of collection.
+     *
+     * @var string
+     */
+    protected $collectionClass;
+
     protected $expandFieldName;
 
     /**
