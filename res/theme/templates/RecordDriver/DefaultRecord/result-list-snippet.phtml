@@ -36,7 +36,7 @@
             <?php foreach ($subRecords as $count => $sub): ?>
               <?php /* adds .ajaxItem selector for displaying item status via JS (check_item_statuses.js) */ ?>
               <li id="<?=$pid . $count?>" class="result<?php if ($this->driver->supportsAjaxStatus()): ?> ajaxItem<?php endif ?>">
-                  <div class="record-number"><?= $count+1 ?></div>  
+                  <div class="record-number"><?= $count + 1 ?></div>
                   <?php /* reuses logic from search/list-list.phtml */ ?>
                   <?php if ($showCheckboxes): ?>
                       <?=$this->record($sub)->getCheckbox('', 'search-cart-form', $pid . $count)?>
