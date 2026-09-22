@@ -6,15 +6,13 @@
   <property name="builddir" value="${tmp}/build/${phing.project.name}" override="true" />
   <property name="srcdir"   value="${project.basedir}" override="true" />
   <property name="skip_phpdoc" value="false" />
-  <property name="phpdoc_version" value="3.3.1" />
+  <property name="phpdoc_version" value="3.10.0" />
 
   <!-- Main Target -->
   <target name="main" description="main target">
     <trycatch property="exceptionmsg">
       <try>
-        <phingcall target="startup" />
         <phingcall target="ci-tasks" />
-        <phingcall target="shutdown" />
       </try>
       <catch>
         <phingcall target="shutdown" />
@@ -136,6 +134,37 @@
     </exec>
   </target>
 
+  <!-- ESLint -->
+  <target name="eslint">
+    <exec executable="npx" escape="false" checkreturn="true" passthru="true">
+      <arg line="eslint ${srcdir}/res/theme/js/**/*.js --no-error-on-unmatched-pattern" />
+    </exec>
+  </target>
+  <target name="eslint-fix">
+    <exec executable="npx" escape="false" passthru="true">
+      <arg line="eslint ${srcdir}/res/theme/js/**/*.js --fix --no-error-on-unmatched-pattern" />
+    </exec>
+  </target>
+  <target name="eslint-report">
+    <exec executable="npx" escape="false">
+      <arg line="eslint ${srcdir}/res/theme/js/**/*.js --format checkstyle -o ${builddir}/reports/eslint-checkstyle.xml --no-error-on-unmatched-pattern" />
+    </exec>
+  </target>
+
+  <!-- Run Sass build, error if it fails -->
+  <target name="checkSassBuild">
+    <exec executable="npm" checkreturn="true" passthru="true">
+      <arg line="run check:scss" />
+    </exec>
+  </target>
+
+  <!-- Check for inconsistencies in the Javascript translation layer -->
+  <target name="jsTranslationsCheck">
+    <exec executable="npm" checkreturn="true" passthru="true">
+      <arg line="run check:jsTranslations" />
+    </exec>
+  </target>
+
   <!-- PHP API Documentation -->
   <target name="phpdoc">
     <!-- Skip the whole phpdoc task when disabled -->
@@ -171,21 +200,5 @@
         </exec>
       </then>
     </if>
-  </target>
-
-  <!-- Set up dependencies -->
-  <target name="startup" description="set up dependencies">
-    <exec executable="composer">
-      <arg line="install" />
-    </exec>
-  </target>
-
-  <!-- Clean up -->
-  <target name="shutdown" description="clean up file system">
-    <delete dir="${srcdir}/vendor" includeemptydirs="true" failonerror="true" />
-    <delete file="${srcdir}/composer.lock" failonerror="true" />
-    <exec executable="git">
-      <arg line="reset --hard" />
-    </exec>
   </target>
 </project>

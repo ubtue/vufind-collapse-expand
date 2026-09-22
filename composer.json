@@ -53,7 +53,7 @@
         "phpmd/phpmd": "2.15.0",
         "phpstan/phpstan": "2.2.5",
         "phing/phing": "3.1.2",
-        "squizlabs/php_codesniffer": "4.0.1",
-        "rector/rector": "2.5.7"
+        "rector/rector": "2.5.7",
+        "squizlabs/php_codesniffer": "4.0.1"
     }
 }

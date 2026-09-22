@@ -1,3 +1,4 @@
+/tests/phpcs.cache.json
 /vendor
 
 .php_cs_cache
