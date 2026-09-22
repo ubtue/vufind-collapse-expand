@@ -6,15 +6,13 @@
   <property name="builddir" value="${tmp}/build/${phing.project.name}" override="true" />
   <property name="srcdir"   value="${project.basedir}" override="true" />
   <property name="skip_phpdoc" value="false" />
-  <property name="phpdoc_version" value="3.3.1" />
+  <property name="phpdoc_version" value="3.10.0" />
 
   <!-- Main Target -->
   <target name="main" description="main target">
     <trycatch property="exceptionmsg">
       <try>
-        <phingcall target="startup" />
         <phingcall target="ci-tasks" />
-        <phingcall target="shutdown" />
       </try>
       <catch>
         <phingcall target="shutdown" />
@@ -39,7 +37,7 @@
     <phingcall target="rector-console"/>
   </target>
 
-  <!-- Quality Assurance PHP Tasks -->
+  <!-- Quality Assurance Tasks -->
   <target name="qa-console" description="quality assurance tasks">
     <phingcall target="qa-php"/>
   </target>
@@ -57,6 +55,7 @@
 
   <!-- Fix PHP Tasks -->
   <target name="fix-php" description="quality assurance php tasks">
+    <!-- Rector may introduce style issues, so run it first -->
     <phingcall target="rector"/>
     <phingcall target="php-cs-fixer"/>
     <phingcall target="phpcbf"/>
@@ -64,14 +63,14 @@
 
   <!-- Report rule violations with PHPMD (mess detector) -->
   <target name="phpmd">
-    <exec executable="${srcdir}/vendor/bin/phpmd">
+    <exec executable="${srcdir}/vendor/bin/phpmd" passthru="true">
       <arg line="${srcdir}/src xml ${srcdir}/tests/phpmd.xml --exclude ${srcdir}/tests --reportfile ${builddir}/reports/phpmd.xml" />
     </exec>
   </target>
 
   <!-- PHP_Depend code analysis -->
   <target name="pdepend">
-    <exec executable="${srcdir}/vendor/bin/pdepend">
+    <exec executable="${srcdir}/vendor/bin/pdepend" passthru="true" checkreturn="true">
       <arg line="--jdepend-xml=${builddir}/reports/jdepend.xml --jdepend-chart=${builddir}/reports/dependencies.svg --overview-pyramid=${builddir}/reports/pdepend-pyramid.svg ${srcdir}/src" />
     </exec>
   </target>
@@ -83,13 +82,13 @@
     </exec>
   </target>
   <target name="phpcs">
-    <exec executable="${srcdir}/vendor/bin/phpcs" escape="false">
-      <arg line="--standard=${srcdir}/tests/phpcs.xml --report=checkstyle &gt; ${builddir}/reports/checkstyle.xml" />
+    <exec executable="${srcdir}/vendor/bin/phpcs" escape="false" passthru="true" checkreturn="true">
+      <arg line="--cache=${srcdir}/tests/phpcs.cache.json --standard=${srcdir}/tests/phpcs.xml --report=checkstyle &gt; ${builddir}/reports/checkstyle.xml" />
     </exec>
   </target>
   <target name="phpcs-console">
     <exec executable="${srcdir}/vendor/bin/phpcs" escape="false" passthru="true" checkreturn="true">
-      <arg line="--standard=${srcdir}/tests/phpcs.xml" />
+      <arg line="--cache=${srcdir}/tests/phpcs.cache.json --standard=${srcdir}/tests/phpcs.xml" />
     </exec>
   </target>
 
@@ -108,7 +107,7 @@
   <!-- php-cs-fixer (first task applies fixes, second task simply checks if they are needed) -->
   <target name="php-cs-fixer">
     <exec executable="${srcdir}/vendor/bin/php-cs-fixer" passthru="true" escape="false">
-      <arg line="fix --config=${srcdir}/tests/vufind.php-cs-fixer.php --verbose" />
+      <arg line="fix --config=${srcdir}/tests/vufind.php-cs-fixer.php -vvv" />
     </exec>
     <exec executable="${srcdir}/vendor/bin/php-cs-fixer" passthru="true" escape="false">
       <arg line="fix --config=${srcdir}/tests/vufind_templates.php-cs-fixer.php -vvv" />
@@ -116,32 +115,75 @@
   </target>
   <target name="php-cs-fixer-dryrun">
     <exec executable="${srcdir}/vendor/bin/php-cs-fixer" passthru="true" escape="false" checkreturn="true">
-      <arg line="fix --config=${srcdir}/tests/vufind.php-cs-fixer.php --dry-run --verbose --diff" />
+      <arg line="fix --config=${srcdir}/tests/vufind.php-cs-fixer.php --dry-run -vvv --diff" />
     </exec>
-    <exec executable="${srcdir}/vendor/bin/php-cs-fixer" passthru="true" escape="false">
-      <arg line="fix --config=${srcdir}/tests/vufind_templates.php-cs-fixer.php --dry-run -vvv" />
+    <exec executable="${srcdir}/vendor/bin/php-cs-fixer" passthru="true" escape="false" checkreturn="true">
+      <arg line="fix --config=${srcdir}/tests/vufind_templates.php-cs-fixer.php --dry-run -vvv --diff" />
+    </exec>
+  </target>
+
+  <!-- Rector -->
+  <target name="rector-console">
+    <exec executable="${srcdir}/vendor/bin/rector" escape="false" passthru="true" checkreturn="true">
+      <arg line="--config=${srcdir}/tests/rector.php --dry-run" />
+    </exec>
+  </target>
+  <target name="rector">
+    <exec executable="${srcdir}/vendor/bin/rector" escape="false" passthru="true" checkreturn="true">
+      <arg line="--config=${srcdir}/tests/rector.php" />
+    </exec>
+  </target>
+
+  <!-- ESLint -->
+  <target name="eslint">
+    <exec executable="npx" escape="false" checkreturn="true" passthru="true">
+      <arg line="eslint ${srcdir}/res/theme/js/**/*.js --no-error-on-unmatched-pattern" />
+    </exec>
+  </target>
+  <target name="eslint-fix">
+    <exec executable="npx" escape="false" passthru="true">
+      <arg line="eslint ${srcdir}/res/theme/js/**/*.js --fix --no-error-on-unmatched-pattern" />
+    </exec>
+  </target>
+  <target name="eslint-report">
+    <exec executable="npx" escape="false">
+      <arg line="eslint ${srcdir}/res/theme/js/**/*.js --format checkstyle -o ${builddir}/reports/eslint-checkstyle.xml --no-error-on-unmatched-pattern" />
+    </exec>
+  </target>
+
+  <!-- Run Sass build, error if it fails -->
+  <target name="checkSassBuild">
+    <exec executable="npm" checkreturn="true" passthru="true">
+      <arg line="run check:scss" />
+    </exec>
+  </target>
+
+  <!-- Check for inconsistencies in the Javascript translation layer -->
+  <target name="jsTranslationsCheck">
+    <exec executable="npm" checkreturn="true" passthru="true">
+      <arg line="run check:jsTranslations" />
     </exec>
   </target>
 
   <!-- PHP API Documentation -->
   <target name="phpdoc">
-    <!-- GET phpDocumentor.phar -->
-    <if>
-      <not><available file="${srcdir}/vendor/bin/phpDocumentor-${phpdoc_version}.phar" /></not>
-      <then>
-        <httpget followRedirects="true" url="https://github.com/phpDocumentor/phpDocumentor2/releases/download/v${phpdoc_version}/phpDocumentor.phar" dir="${srcdir}/vendor/bin" filename="phpDocumentor-${phpdoc_version}.phar" />
-        <chmod mode="0755">
-          <fileset dir="${srcdir}/vendor/bin">
-            <include name="phpDocumentor-${phpdoc_version}.phar" />
-          </fileset>
-        </chmod>
-      </then>
-    </if>
-    <!-- Run phpdoc -->
     <!-- Skip the whole phpdoc task when disabled -->
     <if>
-      <not><istrue value="${skip_phpdoc}" /></not>
+      <not><equals arg1="${skip_phpdoc}" arg2="true" /></not>
       <then>
+        <!-- GET phpDocumentor.phar -->
+        <if>
+          <not><available file="${srcdir}/vendor/bin/phpDocumentor-${phpdoc_version}.phar" /></not>
+          <then>
+            <httpget followRedirects="true" url="https://github.com/phpDocumentor/phpDocumentor2/releases/download/v${phpdoc_version}/phpDocumentor.phar" dir="${srcdir}/vendor/bin" filename="phpDocumentor-${phpdoc_version}.phar" />
+            <chmod mode="0755">
+              <fileset dir="${srcdir}/vendor/bin">
+                <include name="phpDocumentor-${phpdoc_version}.phar" />
+              </fileset>
+            </chmod>
+          </then>
+        </if>
+        <!-- Run phpdoc -->
         <mkdir dir="${builddir}/apidocs" />
         <mkdir dir="${builddir}/docs_cache" />
         <!-- Old embedded version; no longer works correctly...
@@ -158,33 +200,5 @@
         </exec>
       </then>
     </if>
-  </target>
-
-  <!-- Rector -->
-  <target name="rector-console">
-    <exec executable="${srcdir}/vendor/bin/rector" escape="false" passthru="true" checkreturn="true">
-      <arg line="--config=${srcdir}/tests/rector.php --dry-run" />
-    </exec>
-  </target>
-  <target name="rector">
-    <exec executable="${srcdir}/vendor/bin/rector" escape="false" passthru="true" checkreturn="true">
-      <arg line="--config=${srcdir}/tests/rector.php" />
-    </exec>
-  </target>
-
-  <!-- Set up dependencies -->
-  <target name="startup" description="set up dependencies">
-    <exec executable="composer">
-      <arg line="install" />
-    </exec>
-  </target>
-
-  <!-- Clean up -->
-  <target name="shutdown" description="clean up file system">
-    <delete dir="${srcdir}/vendor" includeemptydirs="true" failonerror="true" />
-    <delete file="${srcdir}/composer.lock" failonerror="true" />
-    <exec executable="git">
-      <arg line="reset --hard" />
-    </exec>
   </target>
 </project>
