@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="vufind-module-composer-test" basedir="." default="main">
+<project name="vufind-collapse-expand" basedir="." default="main">
   <property name="sh" value="/bin/sh" />
   <property name="tmp" value="/tmp" />
   <property name="package"  value="${phing.project.name}" override="true" />
